@@ -2861,7 +2861,8 @@ CompressedSection<E>::CompressedSection(Context<E> &ctx, Chunk<E> &chunk) {
   chunk.write_to(ctx, buf.get());
 
   if (ctx.arg.compress_debug_sections == ELFCOMPRESS_ZLIB)
-    compressor.reset(new ZlibCompressor(buf.get(), chunk.shdr.sh_size));
+    compressor.reset(new ZlibCompressor(buf.get(), chunk.shdr.sh_size,
+                                        ctx.arg.compress_debug_sections_level));
   else
     compressor.reset(new ZstdCompressor(buf.get(), chunk.shdr.sh_size,
                                         ctx.arg.compress_debug_sections_level));

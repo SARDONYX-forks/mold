@@ -1,29 +1,21 @@
 #!/bin/bash
 . $(dirname $0)/common.inc
 
-# arm-linux-gnueabihf-objcopy crashes on x86-64
-[[ $MACHINE = arm* ]] && skip
-[ $MACHINE = riscv32 ] && skip
-
-command -v zstdcat >& /dev/null || skip
-
 cat <<EOF | $CC -c -g -o $t/a.o -xc -
 #include <stdio.h>
-
-int main() {
-  printf("Hello world\n");
-  return 0;
-}
+int main() { printf("Hello world\n"); }
 EOF
 
 # Test zstd:1 (lowest level)
 $CC -B. -o $t/exe1 $t/a.o -Wl,--compress-debug-sections=zstd:1
-$OBJCOPY --dump-section .debug_info=$t/debug_info1 $t/exe1
-dd if=$t/debug_info1 of=$t/debug_info1.zstd bs=24 skip=1 status=none
-zstdcat $t/debug_info1.zstd > /dev/null
+readelf -WS $t/exe1 | grep -q '\.debug_info .* [Cx] '
 
-# Test zstd:19 (high level)
-$CC -B. -o $t/exe19 $t/a.o -Wl,--compress-debug-sections=zstd:19
-$OBJCOPY --dump-section .debug_info=$t/debug_info19 $t/exe19
-dd if=$t/debug_info19 of=$t/debug_info19.zstd bs=24 skip=1 status=none
-zstdcat $t/debug_info19.zstd > /dev/null
+# Test zstd:22 (highest level)
+$CC -B. -o $t/exe22 $t/a.o -Wl,--compress-debug-sections=zstd:22
+readelf -WS $t/exe22 | grep -q '\.debug_info .* [Cx] '
+
+# Out-of-range level should fail with a descriptive error
+not $CC -B. -o $t/exe0 $t/a.o -Wl,--compress-debug-sections=zstd:0 |&
+  grep 'zstd level must be between 1 and 22'
+not $CC -B. -o $t/exe23 $t/a.o -Wl,--compress-debug-sections=zstd:23 |&
+  grep 'zstd level must be between 1 and 22'

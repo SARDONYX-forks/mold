@@ -665,7 +665,7 @@ protected:
 
 class ZlibCompressor : public Compressor {
 public:
-  ZlibCompressor(u8 *buf, i64 size);
+  ZlibCompressor(u8 *buf, i64 size, i64 level);
   void write_to(u8 *buf) override;
 
 private:
@@ -674,7 +674,7 @@ private:
 
 class ZstdCompressor : public Compressor {
 public:
-  ZstdCompressor(u8 *buf, i64 size, i64 level = 3);
+  ZstdCompressor(u8 *buf, i64 size, i64 level);
   void write_to(u8 *buf) override;
 };
 
