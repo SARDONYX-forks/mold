@@ -282,8 +282,8 @@ Synonym for \fB\-\-build\-id=sha256\fR\.
 \fB\-\-no\-build\-id\fR
 Synonym for \fB\-\-build\-id=none\fR\.
 .TP
-\fB\-\-compress\-debug\-sections\fR=[ \fBzlib\fR | \fBzlib\-gabi\fR | \fBzstd\fR | \fBzstd:\fR\fIN\fR | \fBnone\fR ]
-Compress DWARF debug info (\fB\.debug_*\fR sections) using the zlib or zstd compression algorithm\. \fBzlib\-gabi\fR is an alias for \fBzlib\fR\. \fBzstd:\fR\fIN\fR selects the zstd compression level, where \fIN\fR is between 1 and 22\. Higher levels achieve better compression ratios but are slower\. \fBzstd\fR is equivalent to \fBzstd:3\fR\.
+\fB\-\-compress\-debug\-sections\fR=[ \fBzlib\fR | \fBzlib\-gabi\fR | \fBzlib:\fR\fIN\fR | \fBzstd\fR | \fBzstd:\fR\fIN\fR | \fBnone\fR ]
+Compress DWARF debug info (\fB\.debug_*\fR sections) using the zlib or zstd compression algorithm\. \fBzlib\-gabi\fR is an alias for \fBzlib\fR\. \fBzlib:\fR\fIN\fR selects the zlib compression level, where \fIN\fR is between 0 and 9 (0 means no compression), and \fBzstd:\fR\fIN\fR selects the zstd compression level, where \fIN\fR is between 1 and 22\. Higher levels achieve better compression ratios but are slower\. \fBzlib\fR is equivalent to \fBzlib:1\fR and \fBzstd\fR is equivalent to \fBzstd:3\fR\.
 .TP
 \fB\-\-defsym\fR=\fIsymbol\fR=\fIvalue\fR
 Define \fIsymbol\fR as an alias for \fIvalue\fR\.
